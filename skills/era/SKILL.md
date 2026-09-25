@@ -21,9 +21,8 @@ console, then start a new session.** The `era` MCP server is the console
 itself at https://console.era.eon.io/mcp; it is OAuth-protected and the
 sign-in is per person, so installing the plugin is not enough, and a session
 cannot do the sign-in itself. Every session of theirs after that carries the
-connection. If a task starts with Era and you have no evidence the user has
-done this, the very first tool call is `whoami` - it tells you in one round
-trip.
+connection. If a task needs the console and you have no evidence the user has
+connected it, call `whoami` first to check in one round trip.
 
 The console is only needed to provision or manage companies. If the task is
 to read an existing company and already comes with its token and endpoints
