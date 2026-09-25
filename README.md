@@ -22,7 +22,7 @@ call to the server answers `401 Unauthorized` and the skill tells Devin to ask
 you for exactly this step.
 
 No Era account yet? Request one at https://console.era.eon.io/access.html.
-Approval arrives by email with a temporary password; then Connect.
+When an operator approves it, Era emails you a first sign-in; then Connect.
 
 Installing for a whole organization: use **Personal** access on the server so
 each member signs in as themselves - one shared login would put everyone's
