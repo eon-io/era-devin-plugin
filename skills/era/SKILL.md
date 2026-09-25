@@ -15,10 +15,14 @@ read-only, so the company does not change under the agent working in it.
 
 ## Get in
 
-This plugin ships one MCP server, `era`, which is the console itself at
-https://console.era.eon.io/mcp. It is OAuth-protected and the sign-in is
-per person: the user connects it once, in the Devin app, and every session of
-theirs carries that connection. A session cannot do the sign-in itself.
+**First, the one thing the user must do themselves, in the Devin app:
+Customize -> MCPs -> From plugins -> era -> Connect, sign in to the Era
+console, then start a new session.** The `era` MCP server is the console
+itself at https://console.era.eon.io/mcp; it is OAuth-protected and the
+sign-in is per person, so installing the plugin is not enough, and a session
+cannot do the sign-in itself. Every session of theirs after that carries the
+connection. If a task needs the console and you have no evidence the user has
+connected it, call `whoami` first to check in one round trip.
 
 The console is only needed to provision or manage companies. If the task is
 to read an existing company and already comes with its token and endpoints
@@ -49,7 +53,12 @@ Otherwise start by calling `whoami`. Read the outcome:
   > still fails, a new session will pick the connection up.
 
   Then retry `whoami` once. If it still answers 401, the connection
-  post-dates this session's start: ask them to open a new session.
+  post-dates this session's start: ask them to open a new session. If a new
+  session they started themselves still answers 401, ask them to check that
+  the era row in Customize -> MCPs actually reads *Connected* (an abandoned
+  sign-in leaves it unconnected) and, if it does, to tell an Era operator -
+  the console is refusing a completed connection and nothing on the Devin
+  side can fix that.
 - **The server is missing** from `mcp_list_servers` - the plugin is not
   installed for this user or this session started before it was. Point them
   at Customize -> Plugins -> Add plugin -> From repository,
