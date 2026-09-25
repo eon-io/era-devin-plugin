@@ -20,9 +20,11 @@ https://console.era.eon.io/mcp. It is OAuth-protected and the sign-in is
 per person: the user connects it once, in the Devin app, and every session of
 theirs carries that connection. A session cannot do the sign-in itself.
 
-The console is only needed to provision or manage companies. If the task
-already comes with an environment's token and endpoints (see the two doors
-below), skip the console and go straight to "Reach the systems".
+The console is only needed to provision or manage companies. If the task is
+to read an existing company and already comes with its token and endpoints
+(see the two doors below), skip the console and go straight to "Reach the
+systems"; rotating tokens, adding systems or removing the company still needs
+the console.
 
 Otherwise start by calling `whoami`. Read the outcome:
 
