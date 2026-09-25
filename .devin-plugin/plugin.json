@@ -1,5 +1,6 @@
 {
   "name": "era",
+  "version": "0.2.0",
   "displayName": "Era",
   "description": "Era by Eon: provision a synthetic company and work its systems — Salesforce, HubSpot, Zendesk, Jira/Confluence, Gong, Slack, Google Drive — as MCP servers and REST APIs over one coherent, read-only dataset.",
   "homepage": "https://console.era.eon.io",
@@ -11,7 +12,8 @@
   ],
   "mcpServers": {
     "era": {
-      "url": "https://console.era.eon.io/mcp"
+      "url": "https://console.era.eon.io/mcp",
+      "transport": "http"
     }
   }
 }
