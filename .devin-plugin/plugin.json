@@ -1,8 +1,8 @@
 {
   "name": "era",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "displayName": "Era",
-  "description": "Era by Eon: provision a synthetic company and work its systems — Salesforce, HubSpot, Zendesk, Jira/Confluence, Gong, Slack, Google Drive — as MCP servers and REST APIs over one coherent, read-only dataset.",
+  "description": "Era by Eon: provision a synthetic company and work its systems — Salesforce, HubSpot, Zendesk, Jira/Confluence, Gong, Slack, Google Drive — as MCP servers and REST APIs over one coherent, read-only dataset. After installing, connect the era server first: Customize → MCPs → era → Connect, then start a new session.",
   "homepage": "https://console.era.eon.io",
   "repository": "https://github.com/eon-io/era-devin-plugin",
   "logo": "logo.svg",
