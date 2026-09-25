@@ -20,27 +20,32 @@ https://console.era.eon.io/mcp. It is OAuth-protected and the sign-in is
 per person: the user connects it once, in the Devin app, and every session of
 theirs carries that connection. A session cannot do the sign-in itself.
 
-Start by calling `whoami`. Read the outcome:
+The console is only needed to provision or manage companies. If the task
+already comes with an environment's token and endpoints (see the two doors
+below), skip the console and go straight to "Reach the systems".
+
+Otherwise start by calling `whoami`. Read the outcome:
 
 - **It answers** - you are in; carry on below.
 - **`401 Unauthorized`** (Devin words it as "the configured credentials ...
-  are invalid or expired ... Settings > MCP Marketplace") - the user has not
-  connected the server yet. Nothing on the session machine fixes this: do not
-  run `era init` here (its callback is a loopback port on this machine that
-  the user's browser cannot reach), do not look for an API key, and do not
-  hunt through Settings. Stop and tell the user, in these words:
+  are invalid or expired ... Settings > MCP Marketplace") - the console does
+  not accept this user's connection: they have never connected the server, or
+  the connection they made has expired. Nothing on the session machine fixes
+  either: do not run `era init` here (its callback is a loopback port on this
+  machine that the user's browser cannot reach), do not look for an API key,
+  and do not hunt through Settings. Stop and tell the user, in these words:
 
-  > Era is installed but not connected for you. In Devin, open
-  > **Customize -> MCPs**, find **era** under *From plugins*, click
-  > **Connect** and sign in to the Era console (Google or email). If you
-  > don't have an Era account yet, request one at
-  > https://console.era.eon.io/access.html - approval arrives by email with
-  > a temporary password - then come back and click Connect. Tell me when
-  > it's done and I'll retry.
+  > Era is installed but the console isn't accepting your connection. In
+  > Devin, open **Customize -> MCPs**, find **era** under *From plugins* and
+  > click **Connect** (or reconnect, if it already shows as connected) and
+  > sign in to the Era console (Google or email). If you don't have an Era
+  > account yet, request one at https://console.era.eon.io/access.html -
+  > approval arrives by email with a temporary password - then come back and
+  > click Connect. Tell me when it's done and I'll retry.
 
-  Then retry `whoami`. If it still answers 401 after the user has connected,
-  the connection was made after this session started: ask them to open a new
-  session.
+  Then retry `whoami`. If it still answers 401 right after the user
+  (re)connected, the connection post-dates this session's start: ask them to
+  open a new session.
 - **The server is missing** from `mcp_list_servers` - the plugin is not
   installed for this user or this session started before it was. Point them
   at Customize -> Plugins -> Add plugin -> From repository,
