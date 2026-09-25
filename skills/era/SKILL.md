@@ -22,7 +22,7 @@ theirs carries that connection. A session cannot do the sign-in itself.
 
 The console is only needed to provision or manage companies. If the task is
 to read an existing company and already comes with its token and endpoints
-(see the two doors below), skip the console and go straight to "Reach the
+(see "Two doors" below), skip the console and go straight to "Reach the
 systems"; rotating tokens, adding systems or removing the company still needs
 the console.
 
@@ -30,24 +30,26 @@ Otherwise start by calling `whoami`. Read the outcome:
 
 - **It answers** - you are in; carry on below.
 - **`401 Unauthorized`** (Devin words it as "the configured credentials ...
-  are invalid or expired ... Settings > MCP Marketplace") - the console does
-  not accept this user's connection: they have never connected the server, or
-  the connection they made has expired. Nothing on the session machine fixes
-  either: do not run `era init` here (its callback is a loopback port on this
-  machine that the user's browser cannot reach), do not look for an API key,
-  and do not hunt through Settings. Stop and tell the user, in these words:
+  are invalid or expired ... Settings > MCP Marketplace"; ignore that hint,
+  the place is Customize -> MCPs) - the console does not accept this user's
+  connection: they have never connected the server, or the connection they
+  made has expired. Nothing on the session machine fixes either: do not run
+  `era init` here (its callback is a loopback port on this machine that the
+  user's browser cannot reach), do not look for an API key, do not hunt
+  through Settings, and do not retry with `request_oauth=true` - it produces
+  no sign-in link for a plugin server. Stop and tell the user, in these words:
 
   > Era is installed but the console isn't accepting your connection. In
   > Devin, open **Customize -> MCPs**, find **era** under *From plugins* and
   > click **Connect** (or reconnect, if it already shows as connected) and
   > sign in to the Era console (Google or email). If you don't have an Era
   > account yet, request one at https://console.era.eon.io/access.html -
-  > approval arrives by email with a temporary password - then come back and
-  > click Connect. Tell me when it's done and I'll retry.
+  > when an operator approves it, Era emails you a first sign-in - then come
+  > back and click Connect. Tell me when it's done and I'll retry; if it
+  > still fails, a new session will pick the connection up.
 
-  Then retry `whoami`. If it still answers 401 right after the user
-  (re)connected, the connection post-dates this session's start: ask them to
-  open a new session.
+  Then retry `whoami` once. If it still answers 401, the connection
+  post-dates this session's start: ask them to open a new session.
 - **The server is missing** from `mcp_list_servers` - the plugin is not
   installed for this user or this session started before it was. Point them
   at Customize -> Plugins -> Add plugin -> From repository,
@@ -58,7 +60,9 @@ Two doors need no console sign-in, both for a company that already exists:
 - The user hands you an environment's token as a secret (`ERA_TENANT_TOKEN`
   and the `*_BASE_URL` / `*_MCP_URL` lines that `era new --write-env` wrote
   on their machine). That token opens the systems directly - go to
-  "Reach the systems"; the console is not needed.
+  "Reach the systems"; the console is not needed. It is a *tenant* token:
+  the CLI's account verbs read `ERA_TOKEN` (a console credential) and reject
+  it, so never export it under that name.
 - Client credentials for a pipeline: `era client <tenant> --reveal --json` on
   the user's machine (or `register_agent_client` once connected) gives a
   `client_id`/`client_secret`; `POST <token_endpoint>` with
