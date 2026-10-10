@@ -1,6 +1,6 @@
 ---
 name: era
-description: How to get onto Era and work in it from Devin - check the era MCP server is connected (and tell the user exactly what to do when it is not), provision a synthetic company (create_design_partner), reach its systems over REST or as custom MCP servers, and investigate across them. Use when a task needs a realistic company's Salesforce, Zendesk, Slack, Jira, Gong or Drive data, or when a call to the era MCP server fails with 401.
+description: How to get onto Era and work in it from Devin - check the era MCP server is connected (and tell the user exactly what to do when it is not), provision a synthetic company (`create_design_partner`), reach its systems over REST or as custom MCP servers, and investigate across them. Use when a task needs a realistic company's Salesforce, Zendesk, Slack, Jira, Gong or Drive data, or when a call to the era MCP server fails with 401.
 ---
 
 # Era: a synthetic company's internal systems, opened to your agent
@@ -93,48 +93,74 @@ Once in, the console tools:
 - `rotate_token(tenant, connectors=["slack"])` - a credential scoped to part of
   the fleet; `remove_design_partner` deprovisions one; `usage` reports what a
   tenant has spent.
+- `add_design_partner_systems` adds systems to an existing company; `design_partner_build` reports a build's progress.
 
 ## Reach the systems
 
-`create_design_partner` gives you both doors, and one token opens them:
+### Through the console, no setup
+
+`list_collections(tenant, connector)` lists a system's read-only tools with
+their arguments. `read_collection(tenant, connector, collection,
+arguments={...})` calls one and returns structured `data`, joined `text` and a
+`refused` flag. Everything goes through the already-connected `era` server:
+there is no custom MCP server or token handling, and a tool that writes is never
+listed. The console throttles these reads per account.
+
+This is the default way to read from a Devin session because a session cannot
+add MCP servers itself.
+
+With the token and URLs `create_design_partner` returns, two more doors open:
 
 - **HTTP.** Each system answers plain REST at its base URL with the same token
   in the vendor's own auth shape. This is the door to use from a session: curl
   or a script, no configuration step.
-- **MCP.** The user can add a system as a custom MCP server (Customize ->
-  MCPs -> Add custom MCP) with the `url` and `headers` the tool returned; a
-  session cannot, so hand them the values rather than trying. Keep the
-  `<tenant>-<system>` name it prints - one account holds several companies, and
-  a bare `slack` answers from whichever was registered last.
+- **MCP.** The user can add a system as a custom MCP server
+  (Customize -> MCPs -> Add custom MCP) with the `url` and `headers` the tool
+  returned; a session cannot, so hand them the values rather than trying. Keep
+  the `<tenant>-<system>` name it prints - one account holds several companies,
+  and a bare `slack` answers from whichever was registered last.
 
 ## Work in it
 
-- The systems are views of one company, not separate fixtures. An account is a
-  Salesforce `Account`, a HubSpot company and a Zendesk organization; the person
-  on it is a contact, a ticket requester, a Slack member and a voice on a Gong
-  call. Each system keeps its own ids, so you join the way you would in a real
-  company - on names, domains, emails and timing - not on a shared key.
-- Don't survey the estate first. The tools are named for the vendor's own
-  operations (`run_soql_query`, `slack_search_messages`, `search_tickets`,
-  `search_files`); pick from what is listed and read the rest when a call needs
-  them.
-- Open with one scoped search - the largest open opportunities, the tickets
-  touched this week, last month's calls. One page of rows tells you who the
-  customers are, when "now" is in this company and what is in trouble.
-- Resolve the entity in one system, then follow it outward: carry its name,
-  domain and its people's emails into the next system, and search a time window
-  rather than an id.
-- Build the timeline before concluding. A conclusion resting on one system's
-  records is usually the wrong one here.
-- Answer with `system:id` attribution - a Salesforce id, a Slack channel and ts,
-  a Zendesk ticket number. If a system returned nothing, say so rather than
+- Don't survey the estate before working it. The tools are named for the vendor's
+  own operations (`run_soql_query`, `slack_search_messages`, `search_tickets`,
+  `search_files`), so pick from the ones your client already lists and read the
+  rest when a call needs them - listing every tool on every server first is
+  minutes of silence that answers nothing. Call `tools/list` for a server when
+  you are code rather than a client, or when nothing in the list looks right.
+- Open with one scoped search, not a whole-company survey: the largest open
+  opportunities, the tickets touched this week, last month's calls. One page of
+  rows tells you who the customers are, when "now" is in this company and what is
+  in trouble - and it is on screen in seconds, before the join begins.
+- Say what you are doing while you do it: name the server and tool before you
+  call it, and give the finding from each system as you get it rather than after
+  the whole investigation. Somebody is usually watching this run. That is
+  progress, not preamble - the final answer still leads with the finding.
+- Resolve the entity in one system first, then follow it outward: carry its name,
+  domain and the emails of its people into the next system, and search a time
+  window rather than an id. Expect each system to call it something else.
+- Build the timeline before concluding. Put what every system returned on one
+  axis by timestamp, and read the order: what came first, what it turned into,
+  where the story stops. A conclusion that rests on one system's records is
+  usually the wrong one here.
+- Answer with `system:id` attribution - a Salesforce id, a Slack channel and ts, a
+  Zendesk ticket number. If a system returned nothing, say so rather than
   inferring it from another.
+- Answer the question that was asked, then stop. Lead with the finding, put the
+  evidence under it, and leave out what was not asked for: no preamble, no
+  restatement of the question, no summary of the work, no extra sections. Report
+  the part of the investigation the question needs, not everything it turned up.
 - Writes are refused (`403 writes_disabled`), so an evaluation scores every run
-  against the same company.
+  against the same company. Advancing an environment a quarter regenerates it
+  from its recipe; ids and anything a client wrote are the recipe's again.
+- The same systems answer plain HTTP at `_BASE_URL` with the same token, in each
+  vendor's own auth shape, when the agent is code rather than a client.
 
-The CLI path (`era init`, `era new`, `era mcp <tenant>`) does the same from
-the user's own terminal; on a session machine only the token-bearing verbs
+
+The CLI path (`era init`, `era new`, `era mcp <tenant>`) does the same
+from the user's own terminal; on a session machine only the token-bearing verbs
 (`era token`, `era client`) are useful, with `ERA_TOKEN` set for the process.
+
 Machine-readable facts and limits are at
 https://console.era.eon.io/llms.txt; the reference is
 https://console.era.eon.io/docs.html.
