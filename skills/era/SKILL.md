@@ -135,6 +135,8 @@ Once in, the console tools:
 The CLI path (`era init`, `era new`, `era mcp <tenant>`) does the same from
 the user's own terminal; on a session machine only the token-bearing verbs
 (`era token`, `era client`) are useful, with `ERA_TOKEN` set for the process.
+`era check <repo>` needs no sign-in: it lists a repo's AWS SDK calls and whether
+Era's AWS simulator answers each with the company's records, empty, or not at all.
 Machine-readable facts and limits are at
 https://console.era.eon.io/llms.txt; the reference is
 https://console.era.eon.io/docs.html.
